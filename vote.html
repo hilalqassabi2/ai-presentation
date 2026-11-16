@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vote – Artificial Intelligence</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@700&display=swap">
+<style>:root{--dk:#141A33;--dk2:#4A5275;--lt2:#EEF1F8;--a1:#00A38D;--a2:#6C63FF;--a3:#F2694A;--a4:#E09C00;--a5:#2F8FE0}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--dk);font-family:Inter,system-ui,sans-serif;color:var(--dk)}
+.wrap{max-width:520px;margin:0 auto;padding:24px 18px 32px;display:flex;flex-direction:column;gap:20px;min-height:100vh}
+header{display:flex;gap:14px;align-items:center;color:#fff}
+.logo{width:52px;height:52px;border-radius:50%;background:var(--a1);display:flex;align-items:center;justify-content:center}
+.logo svg{width:24px;height:24px;fill:#fff}
+.k{margin:0;font-size:14px;color:#4FE0C8;font-weight:600}
+.t{margin:2px 0 0;font-size:24px;font-weight:700;font-family:'Space Grotesk',Inter,sans-serif}
+.box{background:#fff;border-radius:20px;padding:24px 20px;display:flex;flex-direction:column;gap:16px}
+.wait{margin:20px 0;text-align:center;font-size:18px;color:var(--dk2)}
+.q{margin:0;font-size:24px;line-height:1.25;font-weight:700;font-family:'Space Grotesk',Inter,sans-serif}
+.opts{display:flex;flex-direction:column;gap:12px}
+.opt{display:flex;align-items:center;gap:14px;min-height:60px;padding:14px 18px;border-radius:14px;border:2px solid transparent;background:var(--lt2);font:inherit;font-size:19px;font-weight:600;color:var(--dk);text-align:left;cursor:pointer}
+.opt:active{transform:scale(.98)}
+.opt.chosen{border-color:var(--dk);background:#fff}
+.opt:disabled{opacity:.6}
+.dot{width:18px;height:18px;border-radius:50%;flex:none}
+.c0{background:var(--a1)}.c1{background:var(--a2)}.c2{background:var(--a3)}.c3{background:var(--a4)}
+.thanks{margin:4px 0 0;font-weight:700;color:#007A69;font-size:18px;text-align:center}
+.small{margin:-8px 0 0;font-size:14px;color:var(--dk2);text-align:center}
+.foot{margin-top:auto;text-align:center;color:#C9CFE6;font-size:14px}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header><span class="logo"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" aria-hidden="true" focusable="false" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M32,224H64V416H32A31.96166,31.96166,0,0,1,0,384V256A31.96166,31.96166,0,0,1,32,224Zm512-48V448a64.06328,64.06328,0,0,1-64,64H160a64.06328,64.06328,0,0,1-64-64V176a79.974,79.974,0,0,1,80-80H288V32a32,32,0,0,1,64,0V96H464A79.974,79.974,0,0,1,544,176ZM264,256a40,40,0,1,0-40,40A39.997,39.997,0,0,0,264,256Zm-8,128H192v32h64Zm96,0H288v32h64ZM456,256a40,40,0,1,0-40,40A39.997,39.997,0,0,0,456,256Zm-8,128H384v32h64ZM640,256V384a31.96166,31.96166,0,0,1-32,32H576V224h32A31.96166,31.96166,0,0,1,640,256Z"></path></svg></span><div><p class="k">Artificial Intelligence</p><p class="t">Live vote</p></div></header>
+  <section id="box" class="box"><p class="wait">Connecting…</p></section>
+  <p class="foot">Haitham · Ibrahim · Sulaiman · Khalid · Hilal</p>
+</main>
+<script>const ROOM="ai-pres-om-d68514ede707";const POLLS={"warmup":{"q":"What comes to your mind when you hear \"AI\"?","opts":["Robots","ChatGPT","Smartphones","The future"]},"quiz":{"q":"Which one is an example of Generative AI?","opts":["Spam filter","Face unlock","ChatGPT","Calculator"],"correct":2},"usage":{"q":"How many times did you use AI today?","opts":["Not at all","1 to 3 times","4 to 10 times","More than 10"]},"challenge":{"q":"Which challenge of AI worries you most?","opts":["Jobs","Privacy","Fake content","Dependence"]},"teachers":{"q":"In the future, AI will…","opts":["Help teachers","Replace teachers","A bit of both"]}};const NTFY='https://ntfy.sh';</script>
+<script src="vote.js"></script>
+</body>
+</html>
