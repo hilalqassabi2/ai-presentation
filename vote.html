@@ -27,15 +27,28 @@ header{display:flex;gap:14px;align-items:center;color:#fff}
 .thanks{margin:4px 0 0;font-weight:700;color:#007A69;font-size:18px;text-align:center}
 .small{margin:-8px 0 0;font-size:14px;color:var(--dk2);text-align:center}
 .foot{margin-top:auto;text-align:center;color:#C9CFE6;font-size:14px}
+
+.num{width:30px;height:30px;border-radius:50%;background:#fff;border:2px solid var(--dk2);display:flex;align-items:center;justify-content:center;font-size:16px;flex:none}
+.opt.chosen .num{background:var(--dk);border-color:var(--dk);color:#fff}
+.opt:disabled.chosen{opacity:1}
+.row{display:flex;gap:12px}
+.sendbtn,.ghostbtn{flex:1;min-height:54px;border:0;border-radius:14px;font:inherit;font-size:18px;font-weight:700;cursor:pointer}
+.sendbtn{background:var(--a1);color:#fff}.ghostbtn{background:var(--lt2);color:var(--dk)}
+.sendbtn:disabled,.ghostbtn:disabled{opacity:.45}
+.ta{width:100%;border:2px solid var(--lt2);border-radius:14px;padding:14px;font:inherit;font-size:18px;resize:vertical}
+.ta:focus{outline:none;border-color:var(--a2)}
+.left{text-align:left;margin:-4px 0 0}.right{text-align:right;margin:-8px 0 0}
+.mylist{margin:0;padding-left:24px;font-size:18px;line-height:1.7;font-weight:600}
+.small-btn{justify-content:center}
 </style>
 </head>
 <body>
 <main class="wrap">
   <header><span class="logo"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" aria-hidden="true" focusable="false" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M32,224H64V416H32A31.96166,31.96166,0,0,1,0,384V256A31.96166,31.96166,0,0,1,32,224Zm512-48V448a64.06328,64.06328,0,0,1-64,64H160a64.06328,64.06328,0,0,1-64-64V176a79.974,79.974,0,0,1,80-80H288V32a32,32,0,0,1,64,0V96H464A79.974,79.974,0,0,1,544,176ZM264,256a40,40,0,1,0-40,40A39.997,39.997,0,0,0,264,256Zm-8,128H192v32h64Zm96,0H288v32h64ZM456,256a40,40,0,1,0-40,40A39.997,39.997,0,0,0,456,256Zm-8,128H384v32h64ZM640,256V384a31.96166,31.96166,0,0,1-32,32H576V224h32A31.96166,31.96166,0,0,1,640,256Z"></path></svg></span><div><p class="k">Artificial Intelligence</p><p class="t">Live vote</p></div></header>
   <section id="box" class="box"><p class="wait">Connecting…</p></section>
-  <p class="foot">Haitham · Ibrahim · Sulaiman · Khalid · Hilal</p>
+  <p class="foot">Haitham · Hilal · Sulaiman · Khalid · Ibrahim</p>
 </main>
-<script>const ROOM="ai-pres-om-d68514ede707";const POLLS={"warmup":{"q":"What comes to your mind when you hear \"AI\"?","opts":["Robots","ChatGPT","Smartphones","The future"]},"quiz":{"q":"Which one is an example of Generative AI?","opts":["Spam filter","Face unlock","ChatGPT","Calculator"],"correct":2},"usage":{"q":"How many times did you use AI today?","opts":["Not at all","1 to 3 times","4 to 10 times","More than 10"]},"challenge":{"q":"Which challenge of AI worries you most?","opts":["Jobs","Privacy","Fake content","Dependence"]},"teachers":{"q":"In the future, AI will…","opts":["Help teachers","Replace teachers","A bit of both"]}};const NTFY='https://ntfy.sh';</script>
+<script>const ROOM="ai-pres-om-55fe78b4b377";const POLLS={"warmup":{"q":"What comes to your mind when you hear \"AI\"?","opts":["Robots","ChatGPT","Smartphones","The future"]},"quiz":{"q":"Which one is an example of Generative AI?","opts":["Spam filter","Face unlock","ChatGPT","Calculator"],"correct":2},"usage":{"q":"How many times did you use AI today?","opts":["Not at all","1 to 3 times","4 to 10 times","More than 10"]},"challenge":{"q":"Which challenge of AI worries you most?","opts":["Jobs","Privacy","Fake content","Dependence"]},"order":{"type":"order","q":"Put the steps of building an AI system in the correct order","opts":["Collect the data","Clean the data","Train the model","Test the model","Use the model"]},"write":{"type":"text","q":"Complete the sentence: \"In my work, AI can help me to…\""},"teachers":{"q":"In the future, AI will…","opts":["Help teachers","Replace teachers","A bit of both"]}};const NTFY='https://ntfy.sh';</script>
 <script src="vote.js"></script>
 </body>
 </html>

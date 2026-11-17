@@ -65,8 +65,10 @@
   });
 
   // ---- live polls (ntfy.sh) ----
-  var votes = {}; // poll -> {voter: option}
-  Object.keys(POLLS).forEach(function (p) { votes[p] = {}; });
+  var votes = {}, hidden = {}; // poll -> {voter: value}
+  function clear() { Object.keys(POLLS).forEach(function (p) { votes[p] = {}; hidden[p] = {}; }); }
+  clear();
+  function typeOf(p) { return POLLS[p].type || 'choice'; }
 
   document.querySelectorAll('.poll').forEach(function (el) {
     var qr = qrcode(0, 'M'); qr.addData(voteUrl.href); qr.make();
@@ -74,13 +76,16 @@
     el.querySelector('.vurl').textContent = voteUrl.href.replace(/^https?:\/\//, '');
     var p = el.getAttribute('data-poll');
     var rv = el.querySelector('.reveal');
-    if (rv) rv.onclick = function () {
-      el.classList.toggle('revealed');
-      el.querySelector('.bar[data-o="' + POLLS[p].correct + '"]').classList.add('correct');
-      rv.textContent = el.classList.contains('revealed') ? 'Hide answer' : 'Reveal answer';
-    };
+    if (rv) {
+      var label = rv.textContent;
+      rv.onclick = function () {
+        el.classList.toggle('revealed');
+        if (typeOf(p) === 'choice') el.querySelector('.bar[data-o="' + POLLS[p].correct + '"]').classList.add('correct');
+        rv.textContent = el.classList.contains('revealed') ? 'Hide answer' : label;
+      };
+    }
     el.querySelector('.reset').onclick = function () {
-      if (confirm('Clear all votes for this question?')) publish({ t: 'reset', p: p });
+      if (confirm('Clear all answers for this question?')) publish({ t: 'reset', p: p });
     };
   });
 
@@ -98,23 +103,62 @@
   function render(p) {
     var el = document.querySelector('.poll[data-poll="' + p + '"]');
     if (!el) return;
+    var v = votes[p], ids = Object.keys(v), n = ids.length, t = typeOf(p);
+    el.querySelector('.total b').textContent = n;
+    if (t === 'order') {
+      var k = POLLS[p].opts.length, full = 0, pos = [];
+      for (var i = 0; i < k; i++) pos.push(0);
+      ids.forEach(function (id) {
+        var seq = v[id], all = true;
+        for (var i = 0; i < k; i++) { if (seq[i] === i) pos[i]++; else all = false; }
+        if (all) full++;
+      });
+      el.querySelector('.okn').textContent = full;
+      el.querySelector('.pct').textContent = (n ? Math.round(full / n * 100) : 0) + '%';
+      el.querySelectorAll('.answer .acc').forEach(function (a, i) { a.textContent = (n ? Math.round(pos[i] / n * 100) : 0) + '%'; });
+      return;
+    }
+    if (t === 'text') {
+      var wall = el.querySelector('.wall');
+      wall.innerHTML = '';
+      var shown = ids.filter(function (id) { return !hidden[p][id]; }).reverse();
+      if (!shown.length) { var e = document.createElement('p'); e.className = 'empty'; e.textContent = 'Answers will appear here…'; wall.appendChild(e); }
+      shown.forEach(function (id) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'note'; b.textContent = v[id]; b.title = 'Click to hide';
+        b.onclick = function () { hidden[p][id] = true; render(p); };
+        wall.appendChild(b);
+      });
+      return;
+    }
     var counts = POLLS[p].opts.map(function () { return 0; });
-    var v = votes[p], n = 0;
-    Object.keys(v).forEach(function (k) { if (counts[v[k]] !== undefined) { counts[v[k]]++; n++; } });
+    ids.forEach(function (id) { if (counts[v[id]] !== undefined) counts[v[id]]++; });
     var max = Math.max.apply(null, counts.concat([1]));
     counts.forEach(function (c, i) {
       var bar = el.querySelector('.bar[data-o="' + i + '"]');
       bar.querySelector('.fill').style.width = (c / max * 100) + '%';
       bar.querySelector('.bc').textContent = c;
     });
-    el.querySelector('.total b').textContent = n;
   }
 
+  function validSeq(p, s) {
+    var k = POLLS[p].opts.length;
+    if (!Array.isArray(s) || s.length !== k) return false;
+    var seen = {};
+    for (var i = 0; i < k; i++) { if (typeof s[i] !== 'number' || s[i] < 0 || s[i] >= k || seen[s[i]]) return false; seen[s[i]] = 1; }
+    return true;
+  }
   function handle(msg) {
     var d; try { d = JSON.parse(msg); } catch (e) { return; }
     if (!d || !votes[d.p]) return;
-    if (d.t === 'vote' && typeof d.v === 'string' && d.o >= 0 && d.o < POLLS[d.p].opts.length) { votes[d.p][d.v] = d.o; render(d.p); }
-    else if (d.t === 'reset') { votes[d.p] = {}; render(d.p); }
+    var t = typeOf(d.p);
+    if (d.t === 'vote' && typeof d.v === 'string') {
+      if (t === 'choice' && d.o >= 0 && d.o < POLLS[d.p].opts.length) votes[d.p][d.v] = d.o;
+      else if (t === 'order' && validSeq(d.p, d.seq)) votes[d.p][d.v] = d.seq;
+      else if (t === 'text' && typeof d.txt === 'string' && d.txt.trim()) { delete votes[d.p][d.v]; votes[d.p][d.v] = d.txt.trim().slice(0, 140); delete hidden[d.p][d.v]; }
+      else return;
+      render(d.p);
+    } else if (d.t === 'reset') { votes[d.p] = {}; hidden[d.p] = {}; render(d.p); }
   }
   function setLive(on) {
     document.querySelectorAll('.live').forEach(function (l) {
@@ -123,7 +167,7 @@
     });
   }
   function connect() {
-    Object.keys(votes).forEach(function (p) { votes[p] = {}; });
+    clear();
     var es = new EventSource(NTFY + '/' + ROOM + '/sse?since=all');
     es.onopen = function () { setLive(true); };
     es.onmessage = function (e) {
